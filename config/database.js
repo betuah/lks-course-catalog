@@ -1,64 +1,37 @@
-const mongoose = require("mongoose");
-const { resolveContent } = require("nodemailer/lib/shared");
 const { Sequelize } = require("sequelize");
 const env = require("../env");
 
-const mongoConn = () => {
-   mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      autoIndex: true,
-   });
+const sequelize = new Sequelize(
+   env.sequelize.database,
+   env.sequelize.username,
+   env.sequelize.password,
+   {
+      host: env.sequelize.host,
+      logging: false,
+      dialect:
+         env.sequelize
+            .enggine /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */,
+      pool: {
+         max: 5,
+         min: 0,
+         acquire: 30000,
+         idle: 10000,
+      },
+   }
+);
 
-   mongoose.set("bufferCommands", false);
-   const db = mongoose.connection;
-
-   db.on("error", (err) => {
-      logError(err);
-      mongoose.disconnect();
-   });
-
-   db.on("connecting", function () {
-      console.log("Mongodb connecting!");
-   });
-
-   db.on("conneced", function () {
-      console.log("Mongodb connected!");
-   });
-
-   db.on("open", function () {
-      console.log("Mongodb opened!");
-   });
-
-   db.on("disconnected", function () {
-      console.log("MongoDB disconnected!");
-      // mongoose
-      //    .connect(process.env.MONGO_URI, {
-      //       useNewUrlParser: true,
-      //       useUnifiedTopology: true,
-      //       autoIndex: true,
-      //    })
-      //    .catch((err) => {
-      //       mongoose.disconnect();
-      //    });
-   });
+const check_connection = async () => {
+   try {
+      await sequelize.authenticate();
+      console.info("Connection has been established successfully.");
+      // await sequelize.sync({ alter: true });
+      // await sequelize.sync({ force: true });
+      // console.info("The table was sync");
+   } catch (error) {
+      console.error("Unable to connect to the database:", error);
+   }
 };
 
-const sqlConn = () => {
-   const sequelize = new Sequelize(
-      env.sequelize.database,
-      env.sequelize.username,
-      env.sequelize.password,
-      {
-         host: env.sequelize.host,
-         port: env.sequelize.port,
-         dialect:
-            env.sequelize
-               .enggine /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */,
-      }
-   );
+check_connection();
 
-   return sequelize;
-};
-
-module.exports = { mongoConn, sqlConn };
+module.exports = sequelize;

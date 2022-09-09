@@ -83,14 +83,10 @@ app.use(cookieParser());
 /* End Cookie Settings */
 
 /* Start of Routing Modules */
+const courseRoute = require("./routes/course_route");
 
+courseRoute(app);
 /* End of Routing Modules */
-
-/* Start Database Connection Check */
-const { mongoConn } = require("./config/database");
-
-mongoConn();
-/* End Database Connection Check */
 
 if (env.node_env === "production") {
    try {
@@ -100,14 +96,14 @@ if (env.node_env === "production") {
       const httpsApps = https.createServer(credentials, app);
 
       httpsApps.listen(port, () =>
-         console.log(`Server API listen on YOUR_HOST:${env.port}`)
+         console.log(`Server API listen on YOUR_HOST:${port}`)
       );
    } catch (error) {
       console.log(new Error(error));
    }
 } else {
    app.listen(port, () =>
-      console.log(`Server API listen on YOUR_HOST:${env.port}`)
+      console.log(`Server API listen on YOUR_HOST:${port}`)
    );
 }
 
