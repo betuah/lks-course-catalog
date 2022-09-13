@@ -1,17 +1,26 @@
 const express = require("express");
-const app = express();
+const awsParamEnv = require("aws-param-env");
 const cors = require("cors");
 const compression = require("compression");
 const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
-const env = require("./env");
 const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
-const https = require("https");
-const port = env.port || 8000;
+const env = require("./env");
 
+awsParamEnv.load(`/course-catalog/${process.env.NODE_ENV}`, {
+   credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY,
+      secretAccessKey: process.env.AWS_SECRET_KEY,
+   },
+   region: "us-east-1",
+});
+
+const app = express();
+const port = process.env.PORT || 8000;
 // environments
+// app.use(initEnv);
 app.use(helmet());
 app.use(compression());
 app.disable("x-powered-by");
@@ -54,28 +63,11 @@ app.use(
 /* End Logging */
 
 /* Dynamic CORS */
-if (env.node_env === "production") {
-   const whitelist = [`${env.client_host}`, `${env.client_host_prod}`];
-
-   const options = {
-      origin: (origin, callback) => {
-         if (whitelist.indexOf(origin) !== -1) {
-            callback(null, true);
-         } else {
-            callback("CORS Not allowed by SERVER API'S", false);
-         }
-      },
-      credentials: true,
-   };
-   app.use(cors(options));
-} else {
-   app.use(
-      cors({
-         origin: "*",
-      })
-   );
-}
-
+app.use(
+   cors({
+      origin: "*",
+   })
+);
 /* End Dynamic CORS */
 
 /* Start Cookie Settings */
@@ -88,23 +80,10 @@ const courseRoute = require("./routes/course_route");
 courseRoute(app);
 /* End of Routing Modules */
 
-if (env.node_env === "production") {
-   try {
-      const privateKey = fs.readFileSync(`${env.httpsPrivateKey}`, "utf8");
-      const certificate = fs.readFileSync(`${env.httpsCertificate}`, "utf8");
-      const credentials = { key: privateKey, cert: certificate };
-      const httpsApps = https.createServer(credentials, app);
+/* Check database connection */
 
-      httpsApps.listen(port, () =>
-         console.log(`Server API listen on YOUR_HOST:${port}`)
-      );
-   } catch (error) {
-      console.log(new Error(error));
-   }
-} else {
-   app.listen(port, () =>
-      console.log(`Server API listen on YOUR_HOST:${port}`)
-   );
-}
+app.listen(port, () => {
+   console.log(`Server API listen on port ${port}`);
+});
 
 module.exports = app;

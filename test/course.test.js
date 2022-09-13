@@ -3,11 +3,24 @@ const chaiHttp = require("chai-http");
 const expect = require("chai").expect;
 const should = chai.should();
 const fs = require("fs");
-process.env.NODE_ENV = "test";
 const app = require("../app");
+const env = require("../env");
+const {
+   S3Client,
+   PutObjectCommand,
+   DeleteObjectCommand,
+} = require("@aws-sdk/client-s3");
 // Course Model
 const CourseModel = require("../models/course_model");
 chai.use(chaiHttp);
+
+const s3 = new S3Client({
+   credentials: {
+      accessKeyId: env.aws.accessKeyId,
+      secretAccessKey: env.aws.secretAccessKey,
+   },
+   region: env.aws.bucketRegion,
+});
 
 describe("Course API Task", () => {
    describe("Get All course Task", () => {
@@ -16,7 +29,7 @@ describe("Course API Task", () => {
       });
       it("Response must have properties status, error_code, message, and data", (done) => {
          chai
-            .request("http://localhost:8000")
+            .request(app)
             .get("/api/v1/course")
             .end((err, res) => {
                expect(res.body).to.have.property("status");
@@ -28,7 +41,7 @@ describe("Course API Task", () => {
       });
       it("Response must be successful even though the data does not exist", (done) => {
          chai
-            .request("http://localhost:8000")
+            .request(app)
             .get("/api/v1/course")
             .end((err, res) => {
                expect(res).to.have.status(200);
@@ -38,7 +51,7 @@ describe("Course API Task", () => {
       });
       it("Response data must be empty when no data available", (done) => {
          chai
-            .request("http://localhost:8000")
+            .request(app)
             .get("/api/v1/course")
             .end((err, res) => {
                expect(res).to.have.status(200);
@@ -133,7 +146,7 @@ describe("Course API Task", () => {
                fs.readFileSync(__dirname + "/assets/imageTest.png"),
                "imageTest.png"
             )
-            .end((err, res) => {
+            .end(async (err, res) => {
                res.should.have.status(200);
                res.body.should.be.a("object");
                res.body.status.should.equal("SUCCESS");
@@ -141,7 +154,18 @@ describe("Course API Task", () => {
                expect(res.body.data)
                   .to.have.property("coursePics")
                   .not.equal(null);
-               done();
+
+               try {
+                  const params = {
+                     Bucket: env.aws.bucketName,
+                     Key: res.body.data.coursePics,
+                  };
+                  const command = new DeleteObjectCommand(params);
+                  await s3.send(command);
+                  done();
+               } catch (error) {
+                  done();
+               }
             });
       });
 

@@ -2,20 +2,19 @@ const multer = require("multer");
 const multerS3 = require("multer-s3");
 const uuid = require("uuid");
 const { S3Client } = require("@aws-sdk/client-s3");
-const env = require("../env");
 
 const aws_s3 = new S3Client({
    credentials: {
-      accessKeyId: env.aws.accessKeyId,
-      secretAccessKey: env.aws.secretAccessKey,
+      accessKeyId: process.env.AWS_ACCESS_KEY,
+      secretAccessKey: process.env.AWS_SECRET_KEY,
    },
-   region: env.aws.bucketRegion,
+   region: process.env.AWS_BUCKET_REGION,
 });
 
 const uploadToS3 = (req, res, next) => {
    const storageS3 = multerS3({
       s3: aws_s3,
-      bucket: env.aws.bucketName,
+      bucket: process.env.AWS_BUCKET_NAME,
       acl: "private",
       contentType: multerS3.AUTO_CONTENT_TYPE,
       key: (req, file, callback) => {
@@ -80,7 +79,6 @@ const uploadTmp = (req, res, next) => {
    const upload = multer({
       storage: storage,
       fileFilter: (req, file, cb) => {
-         console.log(file.mimetype);
          if (
             (file.fieldname === "coverImage" && file.mimetype == "image/png") ||
             file.mimetype == "image/jpg" ||

@@ -1,16 +1,13 @@
 const { Sequelize } = require("sequelize");
-const env = require("../env");
 
 const sequelize = new Sequelize(
-   env.sequelize.database,
-   env.sequelize.username,
-   env.sequelize.password,
+   process.env.DB_NAME,
+   process.env.DB_USER,
+   process.env.DB_PASSWORD,
    {
-      host: env.sequelize.host,
+      host: process.env.DB_HOST,
       logging: false,
-      dialect:
-         env.sequelize
-            .enggine /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */,
+      dialect: process.env.DB_ENGGINE || "postgres",
       pool: {
          max: 5,
          min: 0,
@@ -20,18 +17,22 @@ const sequelize = new Sequelize(
    }
 );
 
-const check_connection = async () => {
-   try {
-      await sequelize.authenticate();
+sequelize
+   .authenticate()
+   .then(() => {
       console.info("Connection has been established successfully.");
-      // await sequelize.sync({ alter: true });
-      // await sequelize.sync({ force: true });
-      // console.info("The table was sync");
-   } catch (error) {
-      console.error("Unable to connect to the database:", error);
-   }
-};
-
-check_connection();
+      sequelize
+         .sync({ alter: true })
+         .then(() => {
+            console.info("The table was sync");
+         })
+         .catch((e) => {
+            console.log(e);
+         });
+      //       // await sequelize.sync({ force: true });
+   })
+   .catch((e) => {
+      console.log("Unable to connect to the database : ", e);
+   });
 
 module.exports = sequelize;

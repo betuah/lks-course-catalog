@@ -1,3 +1,4 @@
+const uuid = require("uuid");
 const { getSignedUrl } = require("@aws-sdk/cloudfront-signer");
 const {
    S3Client,
@@ -7,12 +8,12 @@ const {
 const env = require("../env");
 const Course = require("../models/course_model");
 
-const s3 = new S3Client({
+const aws_s3 = new S3Client({
    credentials: {
-      accessKeyId: env.aws.accessKeyId,
-      secretAccessKey: env.aws.secretAccessKey,
+      accessKeyId: process.env.AWS_ACCESS_KEY,
+      secretAccessKey: process.env.AWS_SECRET_KEY,
    },
-   region: env.aws.bucketRegion,
+   region: process.env.AWS_BUCKET_REGION,
 });
 
 exports.index = async (req, res) => {
@@ -23,10 +24,10 @@ exports.index = async (req, res) => {
 
          if (i.dataValues.coursePics) {
             imgUrl = getSignedUrl({
-               url: `${env.aws.cfUrl}/${i.coursePics}`,
+               url: `${process.env.AWS_CF_URL}/${i.coursePics}`,
                dateLessThan: new Date(Date.now() + 1000 * 60 * 60 * 24),
-               keyPairId: env.aws.cfKeyPairId,
-               privateKey: env.aws.cfPrivateKey,
+               keyPairId: process.env.AWS_CF_KEY_PAIR_ID,
+               privateKey: process.env.AWS_CF_PRIVATE_KEY,
             });
          }
 
@@ -43,7 +44,6 @@ exports.index = async (req, res) => {
          data: courseData,
       });
    } catch (error) {
-      console.log(error);
       res.status(500).json({
          status: "ERROR",
          error_code: error.name || "ERR_INTRL_SRV_ERR",
@@ -71,10 +71,10 @@ exports.getById = async (req, res) => {
 
       if (courseData.coursePics) {
          imgUrl = getSignedUrl({
-            url: `${env.aws.cfUrl}/${courseData.coursePics}`,
+            url: `${AWS_CF_URL}/${courseData.coursePics}`,
             dateLessThan: new Date(Date.now() + 1000 * 60 * 60 * 24),
-            keyPairId: env.aws.cfKeyPairId,
-            privateKey: env.aws.cfPrivateKey,
+            keyPairId: process.env.AWS_CF_KEY_PAIR_ID,
+            privateKey: process.env.AWS_CF_PRIVATE_KEY,
          });
       }
       const data = {
@@ -162,16 +162,22 @@ exports.update = async (req, res) => {
       } = req.body;
 
       const course = await Course.findByPk(courseId);
+      let coursePics;
 
       if (req.files) {
          if (req.files.length > 0) {
             if ((req.files[0].fileName = "coverImage")) {
                const file = req.files[0];
+               const origFileName = file.originalname.split(".");
+               const s3FileName = `coverImages/${uuid.v4()}.${origFileName[1]}`;
+               coursePics =
+                  course.coursePics == null ? s3FileName : course.coursePics;
                const params = {
-                  Bucket: env.aws.bucketName,
-                  Key: course.coursePics,
+                  Bucket: process.env.AWS_BUCKET_NAME,
+                  Key:
+                     course.coursePics == null ? s3FileName : course.coursePics,
                   Body: file.buffer,
-                  contentTyoe: file.mimeType,
+                  contentTyoe: file.mimetype,
                };
 
                const command = new PutObjectCommand(params);
@@ -186,6 +192,7 @@ exports.update = async (req, res) => {
          courseDesc,
          courseCategory,
          courseLevel,
+         coursePics,
          price,
       };
 
@@ -233,7 +240,7 @@ exports.delete = async (req, res) => {
 
       if (course.coursePics !== null) {
          const params = {
-            Bucket: env.aws.bucketName,
+            Bucket: process.env.AWS_BUCKET_NAME,
             Key: course.coursePics,
          };
          const command = new DeleteObjectCommand(params);
@@ -256,4 +263,8 @@ exports.delete = async (req, res) => {
             : error.message || "Internal Server Error",
       });
    }
+};
+
+exports.test = async (req, res) => {
+   res.send("testing");
 };

@@ -11,4 +11,6 @@ module.exports = (app) => {
    app.route("/api/v1/course").put(uploadTmp, CourseController.update);
 
    app.route("/api/v1/course/:courseId").delete(CourseController.delete);
+
+   app.route("/test").get(CourseController.test);
 };

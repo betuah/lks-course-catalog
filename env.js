@@ -1,21 +1,15 @@
-require("dotenv").config();
+require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` });
 
-const env = {
-   port: process.env.PORT,
-   httpsPrivateKey: process.env.HTTPS_PRIVATE_KEY_PATH,
-   httpsCertificate: process.env.HTTPS_CERTIFICATE_PATH,
-   host: process.env.HOST,
-   client_host: process.env.CLIENT_HOST,
-   client_host_prod: process.env.CLIENT_HOST_PROD,
+const production = {
+   node_env: process.env.NODE_ENV,
    token_secret: process.env.TOKEN_SECRET,
    system_secret: process.env.SYSTEM_SECRET,
    encryption_key: process.env.ENCRYPTION_KEY,
-   db_type: process.env.DB_TYPE,
    log_path: process.env.LOG_PATH,
    cache_path: process.env.LOG_PATH,
    aws: {
-      accessKeyId: process.env.AWS_ACCESS_KEY,
-      secretAccessKey: process.env.AWS_SECRET_KEY,
+      accessKey: process.env.AWS_ACCESS_KEY,
+      secretKey: process.env.AWS_SECRET_KEY,
       bucketName: process.env.AWS_BUCKET_NAME,
       bucketRegion: process.env.AWS_BUCKET_REGION,
       cfUrl: process.env.AWS_CF_URL,
@@ -23,24 +17,12 @@ const env = {
       cfKeyPairId: process.env.AWS_CF_KEY_PAIR_ID,
    },
    sequelize: {
-      database: process.env.DB_NAME,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
-      enggine: process.env.DB_ENGGINE,
-   },
-   mongoose: {
-      database: process.env.MONGO_DB,
-      username: process.env.MONGO_USERNAME,
-      password: process.env.MONGO_PASSWORD,
-      host: process.env.MONGO_HOST,
-      port: process.env.MONGO_PORT,
-   },
-   redis: {
-      host: process.env.REDIS_HOST,
-      port: process.env.REDIS_PORT,
-      password: process.env.REDIS_PASSWORD,
+      dbName: process.env.DB_NAME,
+      dbUser: process.env.DB_USER,
+      dbPassword: process.env.DB_PASSWORD,
+      dbHost: process.env.DB_HOST,
+      dbPort: process.env.DB_PORT,
+      dbEnggine: process.env.DB_ENGGINE,
    },
    mail: {
       host: process.env.MAIL_HOST,
@@ -51,64 +33,41 @@ const env = {
    },
 };
 
-const test = {
-   port: process.env.TEST_PORT,
-   httpsPrivateKey: process.env.TEST_HTTPS_PRIVATE_KEY_PATH,
-   httpsCertificate: process.env.TEST_HTTPS_CERTIFICATE_PATH,
-   host: process.env.TEST_HOST,
-   client_host: process.env.TEST_CLIENT_HOST,
-   client_host_prod: process.env.TEST_CLIENT_HOST_PROD,
-   token_secret: process.env.TEST_TOKEN_SECRET,
-   system_secret: process.env.TEST_SYSTEM_SECRET,
-   encryption_key: process.env.TEST_ENCRYPTION_KEY,
-   db_type: process.env.TEST_DB_TYPE,
-   log_path: process.env.TEST_LOG_PATH,
-   cache_path: process.env.TEST_LOG_PATH,
+const testing = {
+   node_env: process.env.NODE_ENV,
+   token_secret: process.env.TOKEN_SECRET,
+   system_secret: process.env.SYSTEM_SECRET,
+   encryption_key: process.env.ENCRYPTION_KEY,
+   log_path: process.env.LOG_PATH,
+   cache_path: process.env.LOG_PATH,
    aws: {
-      accessKeyId: process.env.TEST_AWS_ACCESS_KEY,
-      secretAccessKey: process.env.TEST_AWS_SECRET_KEY,
-      bucketName: process.env.TEST_AWS_BUCKET_NAME,
-      bucketRegion: process.env.TEST_AWS_BUCKET_REGION,
-      cfUrl: process.env.TEST_AWS_CF_URL,
-      cfPrivateKey: process.env.TEST_AWS_CF_PRIVATE_KEY,
-      cfKeyPairId: process.env.TEST_AWS_CF_KEY_PAIR_ID,
+      accessKey: process.env.AWS_ACCESS_KEY,
+      secretKey: process.env.AWS_SECRET_KEY,
+      bucketName: process.env.AWS_BUCKET_NAME,
+      bucketRegion: process.env.AWS_BUCKET_REGION,
+      cfUrl: process.env.AWS_CF_URL,
+      cfPrivateKey: process.env.AWS_CF_PRIVATE_KEY,
+      cfKeyPairId: process.env.AWS_CF_KEY_PAIR_ID,
    },
    sequelize: {
-      database: process.env.TEST_DB_NAME,
-      username: process.env.TEST_DB_USERNAME,
-      password: process.env.TEST_DB_PASSWORD,
-      host: process.env.TEST_DB_HOST,
-      port: process.env.TEST_DB_PORT,
-      enggine: process.env.TEST_DB_ENGGINE,
-   },
-   mongoose: {
-      database: process.env.TEST_MONGO_DB,
-      username: process.env.TEST_MONGO_USERNAME,
-      password: process.env.TEST_MONGO_PASSWORD,
-      host: process.env.TEST_MONGO_HOST,
-      port: process.env.TEST_MONGO_PORT,
-   },
-   redis: {
-      host: process.env.TEST_REDIS_HOST,
-      port: process.env.TEST_REDIS_PORT,
-      password: process.env.TEST_REDIS_PASSWORD,
+      dbName: process.env.AWS_DB_NAME,
+      dbUser: process.env.AWS_DB_USER,
+      dbPassword: process.env.AWS_DB_PASSWORD,
+      dbHost: process.env.AWS_DB_HOST,
+      dbPort: process.env.AWS_DB_PORT,
+      dbEnggine: process.env.AWS_DB_ENGGINE,
    },
    mail: {
-      host: process.env.TEST_MAIL_HOST,
-      port: process.env.TEST_MAIL_PORT,
-      user: process.env.TEST_MAIL_USER,
-      pass: process.env.TEST_MAIL_PASSWORD,
-      tls: process.env.TEST_MAIL_TLS,
+      host: process.env.MAIL_HOST,
+      port: process.env.MAIL_PORT,
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASSWORD,
+      tls: process.env.MAIL_TLS,
    },
 };
 
 const dev = {
-   port: process.env.DEV_PORT,
-   httpsPrivateKey: process.env.DEV_HTTPS_PRIVATE_KEY_PATH,
-   httpsCertificate: process.env.DEV_HTTPS_CERTIFICATE_PATH,
-   host: process.env.DEV_HOST,
-   client_host: process.env.DEV_CLIENT_HOST,
-   client_host_prod: process.env.DEV_CLIENT_HOST_PROD,
+   node_env: process.env.NODE_ENV,
    token_secret: process.env.DEV_TOKEN_SECRET,
    system_secret: process.env.DEV_SYSTEM_SECRET,
    encryption_key: process.env.DEV_ENCRYPTION_KEY,
@@ -117,7 +76,7 @@ const dev = {
    cache_path: process.env.DEV_LOG_PATH,
    aws: {
       accessKeyId: process.env.DEV_AWS_ACCESS_KEY,
-      secretAccessKey: process.env.DEV_AWS_SECRET_KEY,
+      secretKey: process.env.DEV_AWS_SECRET_KEY,
       bucketName: process.env.DEV_AWS_BUCKET_NAME,
       bucketRegion: process.env.DEV_AWS_BUCKET_REGION,
       cfUrl: process.env.DEV_AWS_CF_URL,
@@ -125,24 +84,12 @@ const dev = {
       cfKeyPairId: process.env.DEV_AWS_CF_KEY_PAIR_ID,
    },
    sequelize: {
-      database: process.env.DEV_DB_NAME,
-      username: process.env.DEV_DB_USERNAME,
-      password: process.env.DEV_DB_PASSWORD,
-      host: process.env.DEV_DB_HOST,
-      port: process.env.DEV_DB_PORT,
-      enggine: process.env.DEV_DB_ENGGINE,
-   },
-   mongoose: {
-      database: process.env.DEV_MONGO_DB,
-      username: process.env.DEV_MONGO_USERNAME,
-      password: process.env.DEV_MONGO_PASSWORD,
-      host: process.env.DEV_MONGO_HOST,
-      port: process.env.DEV_MONGO_PORT,
-   },
-   redis: {
-      host: process.env.DEV_REDIS_HOST,
-      port: process.env.DEV_REDIS_PORT,
-      password: process.env.DEV_REDIS_PASSWORD,
+      dbName: process.env.DEV_DB_NAME,
+      dbUser: process.env.DEV_DB_USERNAME,
+      dbPassword: process.env.DEV_DB_PASSWORD,
+      dbHost: process.env.DEV_DB_HOST,
+      dbPort: process.env.DEV_DB_PORT,
+      dbEnggine: process.env.DEV_DB_ENGGINE,
    },
    mail: {
       host: process.env.DEV_MAIL_HOST,
@@ -153,4 +100,9 @@ const dev = {
    },
 };
 
-module.exports = env;
+module.exports =
+   process.env.NODE_ENV === "production"
+      ? production
+      : process.env.NODE_ENV === "testing"
+      ? testing
+      : dev;

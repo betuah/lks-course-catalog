@@ -4,16 +4,18 @@
    "description": "",
    "main": "index.js",
    "scripts": {
-      "test": "mocha --timeout 20000",
-      "dev": "nodemon app.js",
-      "start": "node app.js",
+      "test": "NODE_ENV=testing mocha --timeout 30000",
+      "dev": "NODE_ENV=production nodemon app.js",
+      "start": "NODE_ENV=production node app.js",
       "start-prod": "pm2 start app.js",
       "stop-prod": "pm2 stop app"
    },
    "author": "Betuah Anugerah",
    "license": "ISC",
    "dependencies": {
+      "@aws-sdk/client-ssm": "^3.168.0",
       "@aws-sdk/cloudfront-signer": "^3.162.0",
+      "aws-param-env": "^2.1.0",
       "aws-sdk": "^2.1192.0",
       "bcrypt": "^5.0.1",
       "bcryptjs": "^2.4.3",
