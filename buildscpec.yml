@@ -1,0 +1,39 @@
+# Do not change version. This is the version of aws buildspec, not the version of your buldspec file.
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16 
+    commands:
+      - echo Installing source NPM Depedencies...
+      - npm install
+  pre_build:
+    commands:
+      - echo Run unit test...
+      - npm run test
+  build:
+    commands:
+      - echo Build started on `date`
+      - npm run start
+  post_build:
+    commands:
+      - echo Build completed on `date`
+# Include only the files required for your application to run.
+# Do not use recursively include artifacts from node_modules directory as it will include unnecessary packages 
+# used only for building and testing.
+# ExpressJS apps will need other artifact directories included (bin/*, public/*, routes/*, views/* etc).
+artifacts:
+  files:
+    - app.js
+    - package.json
+    - node_modules/*
+    - controller/*
+    - config/*
+    - midlewares/*
+    - models/*
+    - public/*
+    - route/*
+    - service/*
+    - test/*
+    - logs/*

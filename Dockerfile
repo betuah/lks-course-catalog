@@ -1,7 +1,7 @@
 FROM node:12-alpine
 
-ARG NODE_ENV=development
-ARG PORT=8000
+ARG NODE_ENV=production
+ARG PORT=80
 
 ENV PORT=${PORT}
 ENV NODE_ENV=${NODE_ENV}

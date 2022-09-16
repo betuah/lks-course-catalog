@@ -5,7 +5,7 @@
    "main": "index.js",
    "scripts": {
       "test": "NODE_ENV=testing mocha --timeout 30000",
-      "dev": "NODE_ENV=production nodemon app.js",
+      "dev": "NODE_ENV=development nodemon app.js",
       "start": "NODE_ENV=production node app.js",
       "start-prod": "pm2 start app.js",
       "stop-prod": "pm2 stop app"
