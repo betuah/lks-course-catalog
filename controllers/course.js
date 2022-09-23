@@ -82,7 +82,7 @@ exports.getById = async (req, res) => {
          coursePics: imgUrl || null,
       };
 
-      res.status(200).json({
+      res.status(500).json({
          status: "SUCCESS",
          error_code: "",
          message: "Data found!",
