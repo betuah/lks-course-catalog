@@ -56,37 +56,41 @@ exports.index = async (req, res) => {
 
 exports.getById = async (req, res) => {
    try {
-      const id = req.params.courseId;
-      const courseData = await Course.findByPk(id);
-      let imgUrl;
-
-      if (courseData == null) {
-         res.status(404).json({
-            status: "ERROR",
-            error_code: "dataNotFound",
-            message: "Course not found!",
-         });
-         return;
-      }
-
-      if (courseData.coursePics) {
-         imgUrl = getSignedUrl({
-            url: `${AWS_CF_URL}/${courseData.coursePics}`,
-            dateLessThan: new Date(Date.now() + 1000 * 60 * 60 * 24),
-            keyPairId: process.env.AWS_CF_KEY_PAIR_ID,
-            privateKey: process.env.AWS_CF_PRIVATE_KEY,
-         });
-      }
-      const data = {
-         ...courseData.dataValues,
-         coursePics: imgUrl || null,
-      };
-
+      // const id = req.params.courseId;
+      // const courseData = await Course.findByPk(id);
+      // let imgUrl;
+      // if (courseData == null) {
+      //    res.status(404).json({
+      //       status: "ERROR",
+      //       error_code: "dataNotFound",
+      //       message: "Course not found!",
+      //    });
+      //    return;
+      // }
+      // if (courseData.coursePics) {
+      //    imgUrl = getSignedUrl({
+      //       url: `${AWS_CF_URL}/${courseData.coursePics}`,
+      //       dateLessThan: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      //       keyPairId: process.env.AWS_CF_KEY_PAIR_ID,
+      //       privateKey: process.env.AWS_CF_PRIVATE_KEY,
+      //    });
+      // }
+      // const data = {
+      //    ...courseData.dataValues,
+      //    coursePics: imgUrl || null,
+      // };
+      // res.status(200).json({
+      //    status: "SUCCESS",
+      //    error_code: "",
+      //    message: "Data found!",
+      //    data: data,
+      // });
       res.status(500).json({
-         status: "SUCCESS",
-         error_code: "",
-         message: "Data found!",
-         data: data,
+         status: "ERROR",
+         error_code: error.name || "ERR_INTRL_SRV_ERR",
+         message: error.errors
+            ? error.errors[0].message
+            : error.message || "Internal Server Error",
       });
    } catch (error) {
       res.status(500).json({
