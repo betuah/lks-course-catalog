@@ -1,27 +1,39 @@
 # Do not change version. This is the version of aws buildspec, not the version of your buldspec file.
 version: 0.2
 
+env:
+  variables:
+    ECR_REPO: 517312321348.dkr.ecr.us-east-1.amazonaws.com/course-app
+
 phases:
   install:
     runtime-versions:
       nodejs: 16
+      docker: 18
   pre_build:
     commands:
-      - echo Installing source NPM Depedencies...
+      - echo "Installing source NPM Depedencies.."
       - npm install
+      - echo "Run unit testing.."
+      - npm run test
+      - echo ${CODEBUILD_SOURCE_VERSION}
   build:
     commands:
-      - echo Run unit testing...
-      - npm run test
+      - echo "Build docker image.."
+      - docker build -t course-catalog .
+      - echo "Tangging docker image"
+      - docker tag ${ECR_REPO}:${CODEBUILD_SOURCE_VERSION}
+      - echo "Build image complete.."
   post_build:
     commands:
-      - echo Build completed...
+      - echo "Build completed.."
+      - $(aws ecr get-login --no-include-email --region eu-west-1)
 
 reports:
   test-report: #surefire junit reports
     files:
       - 'test-result.xml'
-    base-directory: 'report/*'
+    file-format: JUNITXML
 
 artifacts:
   files:
