@@ -26,8 +26,11 @@ phases:
       - echo "Build image complete.."
   post_build:
     commands:
-      - echo "Build completed.."
+      - echo "Logging into ECR.."
       - $(aws ecr get-login --no-include-email --region eu-west-1)
+      - echo "push image to ECR"
+      - docker push ${ECR_REPO}:${CODEBUILD_SOURCE_VERSION}
+      - echo "Push image to ECR completed.."
 
 reports:
   test-report: #surefire junit reports
