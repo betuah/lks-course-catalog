@@ -32,7 +32,7 @@ phases:
 reports:
   test-report: #surefire junit reports
     files:
-      - 'test-result.xml'
+      - 'report/test-result.xml'
     file-format: JUNITXML
 
 artifacts:
