@@ -20,9 +20,9 @@ phases:
   build:
     commands:
       - echo "Build docker image.."
-      - docker build -t course-catalog .
+      - docker build -t course-catalog:latest .
       - echo "Tangging docker image"
-      - docker tag ${ECR_REPO}:${CODEBUILD_SOURCE_VERSION}
+      - docker tag course-catalog:latest ${ECR_REPO}:${CODEBUILD_SOURCE_VERSION}
       - echo "Build image complete.."
   post_build:
     commands:
