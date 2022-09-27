@@ -3,7 +3,8 @@ version: 0.2
 
 env:
   variables:
-    ECR_REPO: 517312321348.dkr.ecr.us-east-1.amazonaws.com/course-app
+    ECR_REPO: 517312321348.dkr.ecr.us-east-1.amazonaws.com/course-catalog
+    ECR_REGION: us-east-1
 
 phases:
   install:
@@ -16,21 +17,20 @@ phases:
       - npm install
       - echo "Run unit testing.."
       - npm run test
-      - echo ${CODEBUILD_SOURCE_VERSION}
+      - echo "Logging into ECR.."
+      - aws ecr get-login-password --region ${ECR_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
   build:
     commands:
       - echo "Build docker image.."
-      - docker build -t course-catalog:latest .
+      - docker build -t ${ECR_REPO}:latest .
       - echo "Tangging docker image"
-      - docker tag course-catalog:latest ${ECR_REPO}:${CODEBUILD_SOURCE_VERSION}
+      - docker tag ${ECR_REPO}:latest ${ECR_REPO}:v${CODEBUILD_BUILD_NUMBER}
       - echo "Build image complete.."
   post_build:
     commands:
-      - echo "Logging into ECR.."
-      # - $(aws ecr get-login --no-include-email --region eu-west-1)
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --pasword-stdin ${ECR_REPO}
       - echo "push image to ECR"
-      - docker push ${ECR_REPO}:${CODEBUILD_SOURCE_VERSION}
+      - docker push ${ECR_REPO}:latest
+      - docker push ${ECR_REPO}:v${CODEBUILD_BUILD_NUMBER}
       - echo "Push image to ECR completed.."
 
 reports:
