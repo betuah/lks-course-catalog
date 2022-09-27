@@ -44,6 +44,7 @@ exports.index = async (req, res) => {
          data: courseData,
       });
    } catch (error) {
+      // console.log(new Error(error));
       res.status(500).json({
          status: "ERROR",
          error_code: error.name || "ERR_INTRL_SRV_ERR",
@@ -69,7 +70,7 @@ exports.getById = async (req, res) => {
       }
       if (courseData.coursePics) {
          imgUrl = getSignedUrl({
-            url: `${AWS_CF_URL}/${courseData.coursePics}`,
+            url: `${process.env.AWS_CF_URL}/${courseData.coursePics}`,
             dateLessThan: new Date(Date.now() + 1000 * 60 * 60 * 24),
             keyPairId: process.env.AWS_CF_KEY_PAIR_ID,
             privateKey: process.env.AWS_CF_PRIVATE_KEY,
@@ -86,6 +87,7 @@ exports.getById = async (req, res) => {
          data: data,
       });
    } catch (error) {
+      // console.log(new Error(error));
       res.status(500).json({
          status: "ERROR",
          error_code: error.name || "ERR_INTRL_SRV_ERR",
@@ -137,6 +139,7 @@ exports.create = async (req, res) => {
          data: course,
       });
    } catch (error) {
+      // console.log(new Error(error));
       res.status(500).json({
          status: "ERROR",
          error_code: error.name || "ERR_INTRL_SRV_ERR",
@@ -212,6 +215,7 @@ exports.update = async (req, res) => {
          data: courseUpdate,
       });
    } catch (error) {
+      // console.log(new Error(error));
       res.status(500).json({
          status: "ERROR",
          error_code: error.name || "ERR_INTRL_SRV_ERR",
@@ -241,7 +245,7 @@ exports.delete = async (req, res) => {
             Key: course.coursePics,
          };
          const command = new DeleteObjectCommand(params);
-         await s3.send(command);
+         await aws_s3.send(command);
       }
 
       await Course.destroy({ where: { courseId } });
@@ -252,6 +256,7 @@ exports.delete = async (req, res) => {
          message: "Delete course success!",
       });
    } catch (error) {
+      // console.log(new Error(error));
       res.status(500).json({
          status: "ERROR",
          error_code: error.name || "ERR_INTRL_SRV_ERR",

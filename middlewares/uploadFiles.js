@@ -63,6 +63,7 @@ const uploadToS3 = (req, res, next) => {
             message: err.msg || "Upload Error Occured.",
          });
       } else if (err) {
+         console.log(new Error(err));
          return res.status(200).json({
             success: false,
             error_code: err.code || "ERR_UPLOAD_ERROR",
