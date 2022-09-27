@@ -126,3 +126,5 @@ docker-compose-dev.yml
 
 serviceAccountKey*
 ./serviceAccountKey.json
+
+report/*
