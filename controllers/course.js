@@ -262,6 +262,6 @@ exports.delete = async (req, res) => {
    }
 };
 
-exports.test = async (req, res) => {
-   res.send("testing");
+exports.check = async (req, res) => {
+   res.status(200).send("success");
 };
