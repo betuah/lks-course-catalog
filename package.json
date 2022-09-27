@@ -4,11 +4,9 @@
    "description": "",
    "main": "index.js",
    "scripts": {
-      "test": "NODE_ENV=testing MOCHA_FILE=./report/test-result.xml mocha --timeout 30000 --exit --reporter mocha-junit-reporter",
-      "dev": "NODE_ENV=development nodemon app.js",
-      "start": "NODE_ENV=production node app.js",
-      "start-prod": "pm2 start app.js",
-      "stop-prod": "pm2 stop app"
+      "test": "NODE_ENV=testing PORT=9000 MOCHA_FILE=./report/test-result.xml mocha --timeout 30000 --exit --reporter mocha-junit-reporter",
+      "dev": "NODE_ENV=development PORT=8000 nodemon app.js",
+      "start": "NODE_ENV=production PORT=8000 node app.js"
    },
    "author": "Betuah Anugerah",
    "license": "ISC",
