@@ -33,7 +33,7 @@ phases:
       - docker push ${ECR_REPO}:v${CODEBUILD_BUILD_NUMBER}
       - echo "Push image to ECR completed.."
       - echo "Create image definition.."
-      - printf '[{"name":"course-catalog-service","image":"%s"}]' ${ECR_REPO}:latest > imagedef.json
+      - printf '[{"name":"container-course-catalog","imageUri":"%s"}]' ${ECR_REPO}:latest > imagedefinitions.json
       - echo "build complete.."
 
 reports:
@@ -44,4 +44,4 @@ reports:
 
 artifacts:
   files:
-    - imagedef.json
+    - imagedefinitions.json
