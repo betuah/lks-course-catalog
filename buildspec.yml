@@ -5,7 +5,7 @@ env:
   variables:
     ECR_REPO: 517312321348.dkr.ecr.us-east-1.amazonaws.com/course-catalog
     ECR_REGION: us-east-1
-    CONTAINER_NAME: container-course-catalog
+    CONTAINER_NAME: course-catalog-container
 
 phases:
   install:
