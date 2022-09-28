@@ -30,7 +30,7 @@ describe("Course API Task", () => {
       it("Response must have properties status, error_code, message, and data", (done) => {
          chai
             .request(app)
-            .get("/api/v1/course")
+            .get("/api/v1/catalog")
             .end((err, res) => {
                expect(res.body).to.have.property("status");
                expect(res.body).to.have.property("error_code");
@@ -42,7 +42,7 @@ describe("Course API Task", () => {
       it("Response must be successful even though the data does not exist", (done) => {
          chai
             .request(app)
-            .get("/api/v1/course")
+            .get("/api/v1/catalog")
             .end((err, res) => {
                expect(res).to.have.status(200);
                expect(res.body).to.have.property("status").equal("SUCCESS");
@@ -52,7 +52,7 @@ describe("Course API Task", () => {
       it("Response data must be empty when no data available", (done) => {
          chai
             .request(app)
-            .get("/api/v1/course")
+            .get("/api/v1/catalog")
             .end((err, res) => {
                expect(res).to.have.status(200);
                expect(res).to.have.property("status");
@@ -96,7 +96,7 @@ describe("Course API Task", () => {
 
          chai
             .request(app)
-            .post("/api/v1/course")
+            .post("/api/v1/catalog")
             .send(courseData)
             .end((err, res) => {
                expect(res.body).to.have.property("status");
@@ -119,7 +119,7 @@ describe("Course API Task", () => {
 
          chai
             .request(app)
-            .post("/api/v1/course")
+            .post("/api/v1/catalog")
             .send(courseData)
             .end((err, res) => {
                res.should.have.status(200);
@@ -133,7 +133,7 @@ describe("Course API Task", () => {
       it("POST course with file upload should be success and have response data", (done) => {
          chai
             .request(app)
-            .post("/api/v1/course")
+            .post("/api/v1/catalog")
             .set("Content-Type", "application/x-www-form-urlencoded")
             .field("courseId", "TEST_O2")
             .field("courseName", "Testing Course")
@@ -181,7 +181,7 @@ describe("Course API Task", () => {
 
          chai
             .request(app)
-            .post("/api/v1/course")
+            .post("/api/v1/catalog")
             .send(courseData)
             .end((err, res) => {
                expect(res).to.have.status(500);
@@ -207,7 +207,7 @@ describe("Course API Task", () => {
 
          chai
             .request(app)
-            .post("/api/v1/course")
+            .post("/api/v1/catalog")
             .send(courseData)
             .end((err, res) => {
                expect(res).to.have.status(500);
@@ -233,7 +233,7 @@ describe("Course API Task", () => {
 
          chai
             .request(app)
-            .post("/api/v1/course")
+            .post("/api/v1/catalog")
             .send(courseData)
             .end((err, res) => {
                expect(res).to.have.status(500);
@@ -256,7 +256,7 @@ describe("Course API Task", () => {
 
          chai
             .request(app)
-            .post("/api/v1/course")
+            .post("/api/v1/catalog")
             .send(courseData)
             .end((err, res) => {
                expect(res).to.have.status(200);
@@ -291,7 +291,7 @@ describe("Course API Task", () => {
       it("Get by id should be success", (done) => {
          chai
             .request(app)
-            .get("/api/v1/course/TEST_O1")
+            .get("/api/v1/catalog/TEST_O1")
             .end((err, res) => {
                expect(res).to.have.status(200);
                expect(res.body).to.have.property("status").equal("SUCCESS");
@@ -312,7 +312,7 @@ describe("Course API Task", () => {
 
          chai
             .request(app)
-            .put("/api/v1/course")
+            .put("/api/v1/catalog")
             .send(updatedata)
             .end((err, res) => {
                expect(res).to.have.status(200);
@@ -338,7 +338,7 @@ describe("Course API Task", () => {
       it("PUT data shoud be success to update one of data", (done) => {
          chai
             .request(app)
-            .put("/api/v1/course")
+            .put("/api/v1/catalog")
             .send({ courseId: "TEST_O1", price: 200000 })
             .end((err, res) => {
                expect(res).to.have.status(200);
@@ -352,7 +352,7 @@ describe("Course API Task", () => {
       it("PUT data should be error when input wrong id", (done) => {
          chai
             .request(app)
-            .put("/api/v1/course")
+            .put("/api/v1/catalog")
             .send({ courseId: "Random", price: 200000 })
             .end((err, res) => {
                expect(res).to.have.status(404);
@@ -392,7 +392,7 @@ describe("Course API Task", () => {
       it("DELETE data should be success to remove data by id", (done) => {
          chai
             .request(app)
-            .delete("/api/v1/course/testid")
+            .delete("/api/v1/catalog/testid")
             .end((err, res) => {
                expect(res).to.have.status(200);
                expect(res.body).to.have.property("status").equal("SUCCESS");
@@ -403,7 +403,7 @@ describe("Course API Task", () => {
       it("DELETE data should be error when wrong input id", (done) => {
          chai
             .request(app)
-            .delete("/api/v1/course/RandomID")
+            .delete("/api/v1/catalog/RandomID")
             .end((err, res) => {
                expect(res).to.have.status(404);
                expect(res.body).to.have.property("status").equal("ERROR");
