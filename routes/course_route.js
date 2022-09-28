@@ -12,5 +12,5 @@ module.exports = (app) => {
 
    app.route("/api/v1/course/:courseId").delete(CourseController.delete);
 
-   app.route("/health/check").get(CourseController.check);
+   app.route("/").get(CourseController.check);
 };
