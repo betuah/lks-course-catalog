@@ -15,12 +15,12 @@ phases:
     commands:
       - echo "Installing source NPM Depedencies.."
       - npm install
-      - echo "Run unit testing.."
-      - npm run test
       - echo "Logging into ECR.."
       - aws ecr get-login-password --region ${ECR_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
   build:
     commands:
+      - echo "Run unit testing.."
+      - npm run test
       - echo "Build docker image.."
       - docker build -t ${ECR_REPO}:latest .
       - echo "Tangging docker image"
@@ -28,10 +28,13 @@ phases:
       - echo "Build image complete.."
   post_build:
     commands:
-      - echo "push image to ECR"
+      - echo "push image to ECR.."
       - docker push ${ECR_REPO}:latest
       - docker push ${ECR_REPO}:v${CODEBUILD_BUILD_NUMBER}
       - echo "Push image to ECR completed.."
+      - echo "Create image definition.."
+      - printf '[{"name":"course-catalog-service","image":"%s"}]' ${ECR_REPO}:latest > imagedef.json
+      - echo "build complete.."
 
 reports:
   test-report: #surefire junit reports
@@ -41,4 +44,4 @@ reports:
 
 artifacts:
   files:
-    - '**/*'
+    - imagedef.json
