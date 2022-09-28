@@ -38,7 +38,7 @@ phases:
       - echo "build complete.."
 
 reports:
-  test-report: #surefire junit reports
+  test-report:
     files:
       - 'report/test-result.xml'
     file-format: JUNITXML
