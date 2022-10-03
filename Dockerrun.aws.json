@@ -1,0 +1,11 @@
+{
+   "AWSEBDockerrunVersion": 2,
+   "containerDefinitions": [
+      {
+         "name": "course-catalog-container",
+         "image": "517312321348.dkr.ecr.us-east-1.amazonaws.com/course-catalog",
+         "essential": true,
+         "memory": 128
+      }
+   ]
+}
