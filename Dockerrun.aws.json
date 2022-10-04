@@ -1,11 +1,16 @@
 {
-   "AWSEBDockerrunVersion": 1,
-   "containerDefinitions": [
+   "AWSEBDockerrunVersion": "1",
+   "Authentication": {
+      "Bucket": "myartifact101",
+      "Key": "config.json"
+   },
+   "Image": {
+      "Name": "517312321348.dkr.ecr.us-east-1.amazonaws.com/course-catalog:latest"
+   },
+   "Ports": [
       {
-         "name": "course-catalog-container",
-         "image": "517312321348.dkr.ecr.us-east-1.amazonaws.com/course-catalog:latest",
-         "essential": true,
-         "memory": 128
+         "ContainerPort": 8000,
+         "HostPort": 80
       }
    ]
 }
