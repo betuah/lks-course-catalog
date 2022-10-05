@@ -4,7 +4,7 @@
 Course catalog service is a part of course app API backend services to handle catalog functionality.
 
 ## TechStack
----
+
 Course Catalog uses a number of technology stack to work properly:
 - [node.js] - evented I/O for the backend
 - [Express] - fast node.js network app framework 
@@ -15,11 +15,11 @@ Course Catalog uses a number of technology stack to work properly:
 - [postgres] - Most Advanced Open Source Relational Database in the world
 
 ## API Endpoint
----
+
 You can check the API endpoint documentation in [here]
 
 ## Installation and setup
----
+
 
 #### Environment Variable
 
