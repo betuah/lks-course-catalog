@@ -37,7 +37,7 @@ Course Catalog Service is uses several services that exist in AWS such as S3, RD
 
 <br/>
 
-> ***Example*** : /course-catalog/production/AWS_BUCKET_NAME
+> ***Example*** : `/course-catalog/production/AWS_BUCKET_NAME`
 
 <br/>
 
