@@ -79,7 +79,7 @@ docker build -t <name_tag> .
 > Note: You can change `<name_tag>` with image name whatever you want or you can change with your docker registry repository for example :
 
 ```sh
-docker build dkr.ecr.us-east-1.amazonaws.com/course-catalog:latest .
+docker build AWS_ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/course-catalog:latest .
 ```
 Once done, you can run the Docker image and map the port to whatever you wish on your host. In this example, we simply map port 8080 of the host to port 8000 of the Docker (or whatever port was exposed in the Dockerfile):
 
