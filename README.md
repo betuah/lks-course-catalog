@@ -30,6 +30,8 @@ Course catalog service need environment variable to comunicate with other AWS se
 | **AWS_ACCESS_KEY** | ***true*** | Aws access key to access the parameter store and S3 bucket |
 |**AWS_SECRET_KEY**| ***true*** | Aws secret key to access the parameter store and S3 bucket |
 
+> **Note** : If your want to run env variable in local machine, you need to create **.env.production** and **.env.testing** by filling the key and value in the table above
+
 #### Parameter Store
 Course Catalog Service is uses several services that exist in AWS such as S3, RDS, and CloudFront with all service configurations stored in the SSM Parameter Store. The Parameter store Name is use hierarchy path like `/course-catalog/{{ENVIRONMENT}}/{{KEY}}`, you can change `{{ENVIRONMENT}}` with `production` for production use or `testing` for testing use. The `{{KEY}}` must be strict with key name in the table bellow.
 
@@ -56,12 +58,24 @@ Course Catalog Service is uses several services that exist in AWS such as S3, RD
 | **DB_USER** | String | Database username |
 | **DB_PASSWORD** | SecureString | Database password |
 
+#### Run Unit Test
+You can easily run unit tests for Course Catalog Services for production test with the following command:
+
+```sh
+npm install
+npm run test 
+```
+these command will be generate `test-result.xml` file in **report** folder with JUnit format. If you want to show the testing result in the terminal, just following this command bellow :
+```sh
+npm install
+npm run testdev
+```
+
 #### Run the server
 Course Catalog requires [Node.js](https://nodejs.org/) v16+ to run.
 Install the dependencies and start the server.
 
 ```sh
-cd course-catalog
 npm install
 npm run start
 ```
@@ -69,14 +83,16 @@ npm run start
 ### Run with Docker
 
 Course catalog is very easy to install and deploy in a Docker container.
-By default, the Docker will expose port 8000 for production and port 9000 for testing, so change this within the Dockerfile if necessary. When ready, simply use the Dockerfile to build the image.
+By default, the Docker will expose port 8000 for production and port 9000 for testing, When ready, simply use the Dockerfile to build the image.
 
 ```sh
-cd course-catalog
 docker build -t <name_tag> .
 ```
-
-> Note: You can change `<name_tag>` with image name whatever you want or you can change with your docker registry repository for example :
+You can change `<name_tag>` with image name whatever you want. Let me gift you some example :
+```sh
+docker build -t course-catalog:latest .
+```
+or if you want to push the image to some docker registry repository like ECR just change the `<name_tag>` with the repository url, for example :
 
 ```sh
 docker build AWS_ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/course-catalog:latest .
