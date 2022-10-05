@@ -20,7 +20,6 @@ You can check the API endpoint documentation in [here]
 
 ## Installation and setup
 ---
-<br/>
 
 #### Environment Variable
 
