@@ -23,15 +23,18 @@ You can check the API endpoint documentation in [here]
 <br/>
 #### Environment Variable
 Course catalog service need environment variable to comunicate with other AWS services like SSM Parameter Store and S3 Bucket. The following bellow is a list of the environments.
+
 | KEY | Required | Description  |
 |--|--|--|
 | **AWS_ACCESS_KEY** | ***true*** | Aws access key to access the parameter store and S3 bucket |
 |**AWS_SECRET_KEY**| ***true*** | Aws secret key to access the parameter store and S3 bucket |
+
 #### Parameter Store
 Course Catalog Service is uses several services that exist in AWS such as S3, RDS, and CloudFront with all service configurations stored in the SSM Parameter Store. The Parameter store Name is use hierarchy path like `/course-catalog/{{ENVIRONMENT}}/{{KEY}}`, you can change `{{ENVIRONMENT}}` with `production` for production use or `testing` for testing use. The `{{KEY}}` must be strict with key name in the table bellow.
+
 <br/>
 
-> **Example** : /course-catalog/production/AWS_BUCKET_NAME
+> ***Example*** : /course-catalog/production/AWS_BUCKET_NAME
 
 <br/>
 
