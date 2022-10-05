@@ -21,7 +21,9 @@ You can check the API endpoint documentation in [here]
 ## Installation and setup
 ---
 <br/>
+
 #### Environment Variable
+
 Course catalog service need environment variable to comunicate with other AWS services like SSM Parameter Store and S3 Bucket. The following bellow is a list of the environments.
 
 | KEY | Required | Description  |
