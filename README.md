@@ -20,7 +20,6 @@ You can check the API endpoint documentation in [here]
 
 ## Installation and setup
 
-
 #### Environment Variable
 
 Course catalog service need environment variable to comunicate with other AWS services like SSM Parameter Store and S3 Bucket. The following bellow is a list of the environments.
@@ -30,10 +29,10 @@ Course catalog service need environment variable to comunicate with other AWS se
 | **AWS_ACCESS_KEY** | ***true*** | Aws access key to access the parameter store and S3 bucket |
 |**AWS_SECRET_KEY**| ***true*** | Aws secret key to access the parameter store and S3 bucket |
 
-> **Note** : If your want to run env variable in local machine, you need to create **.env.production** and **.env.testing** by filling the key and value in the table above
+> **Note** : This environment is mandatory so you have to attach this environment on every platform you run on. If your want to run env variable in local machine, you need to create **.env.production** and **.env.testing** by filling the key and value in the table above
 
 #### Parameter Store
-Course Catalog Service is uses several services that exist in AWS such as S3, RDS, and CloudFront with all service configurations stored in the SSM Parameter Store. The Parameter store Name is use hierarchy path like `/course-catalog/{{ENVIRONMENT}}/{{KEY}}`, you can change `{{ENVIRONMENT}}` with `production` for production use or `testing` for testing use. The `{{KEY}}` must be strict with key name in the table bellow.
+Course Catalog Service is using several services that exist in AWS such as S3, RDS, and CloudFront with all service configurations stored in the SSM Parameter Store. The Parameter store Name is use hierarchy path like `/course-catalog/{{ENVIRONMENT}}/{{KEY}}`, you can change `{{ENVIRONMENT}}` with `production` for production use or `testing` for testing use. The `{{KEY}}` must be strict with key name in the table below.
 
 <br/>
 
@@ -52,7 +51,7 @@ Course Catalog Service is uses several services that exist in AWS such as S3, RD
 | **AWS_CF_KEY_PAIR_ID** | SecureString | CloudFront public key pair id |
 | **AWS_CF_PRIVATE_KEY** | SecureString | CloudFront private key |
 | **AWS_CF_URL** | String | CloudFont distribution URL |
-| **DB_ENGGINE** | String |Database enggine for database. **Note : for this key you must use `postgres` as the value** |
+| **DB_ENGGINE** | String | Database enggine for database. **Note : for this key you must use `postgres` as the value** |
 | **DB_HOST** | String | Database host |
 | **DB_NAME** | String | Database name |
 | **DB_USER** | String | Database username |
