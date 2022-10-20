@@ -22,7 +22,9 @@ You can check the API endpoint documentation in [here]
 
 #### Environment Variable
 
-Course catalog service need environment variable to comunicate with other AWS services like SSM Parameter Store and S3 Bucket. The following bellow is a list of the environments.
+Course catalog service need IAM user to comunicate with other AWS services like SSM Parameter Store and S3 Bucket. You need to grand access for SSM Parameter store to get parameter store by path and S3 to put, get and delete the object.
+
+The following bellow is a list of the environments to store the access and secret key for IAM User.
 
 | KEY | Required | Description  |
 |--|--|--|
